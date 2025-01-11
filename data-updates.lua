@@ -7,15 +7,18 @@ for mname, machine_orig in pairs(data.raw["assembling-machine"]) do
         if machine_orig.module_slots ~= nil and machine_orig.module_slots > 0 and qvalue.level > 0 then
             local machine = table.deepcopy(machine_orig)
             if machine_orig.placeable_by == nil then
-                if machine_orig.minable.result ~= nil then
+                if machine_orig.minable == nil then
+                    -- placeable_by is nil
+                    -- minable is nil
+                    -- how am I supposed to figure out what item places this
+                    -- if anyone has another idea, make a PR and fix and cleanup the code yourself
+                    -- man it's like holoitems again
+                    machine.placeable_by = nil
+                elseif machine_orig.minable.result ~= nil then
                     machine.placeable_by = {item=machine_orig.minable.result, count=1, quality=qvalue}
                 else
-                    machine["results"] = {}
-                    for idx,result in pairs(machine_orig.minable.results) do
-                        local copy = table.deepcopy(result)
-                        copy["quality"]=qvalue
-                        machine["results"][idx] = copy
-                    end
+                    -- true for most machines tbh, actually most machines dont even use more than one results[] value
+                    machine.placeable_by = {item=machine_orig.minable.results[1]["name"], count=1, quality=qvalue}
                 end
             elseif machine_orig.placeable_by["item"] ~= nil then
                 machine.placeable_by = table.deepcopy(machine_orig.placeable_by)
