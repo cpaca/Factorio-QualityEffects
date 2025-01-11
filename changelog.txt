@@ -1,0 +1,6 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2024-01-08
+Features:
+- Added changelog.txt
+- Fixed placeable_by value in maraxsis hydro plants
